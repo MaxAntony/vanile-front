@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, Card, CardContent, TextField, Typography } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import CakeIcon from "@mui/icons-material/Cake";
 import { ComponentType, useRef } from "react";
@@ -56,6 +56,101 @@ const filters: Filter[] = [
   },
 ];
 
+type Product = {
+  img: string;
+  title: string;
+  category: string;
+  price: number;
+  quantity: number;
+};
+
+const products: Product[] = [
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Tarta de manzana",
+    category: "Postres",
+    price: 5.99,
+    quantity: 12,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Chocolate caliente",
+    category: "Bebidas",
+    price: 2.49,
+    quantity: 25,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Galletas de avena",
+    category: "Postres",
+    price: 3.99,
+    quantity: 30,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Café espresso",
+    category: "Bebidas",
+    price: 1.99,
+    quantity: 50,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Tiramisu",
+    category: "Postres",
+    price: 6.49,
+    quantity: 15,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Limonada natural",
+    category: "Bebidas",
+    price: 2.79,
+    quantity: 40,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Cheesecake de frutos rojos",
+    category: "Postres",
+    price: 7.99,
+    quantity: 8,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Mojito",
+    category: "Bebidas",
+    price: 4.99,
+    quantity: 10,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Brownie de chocolate",
+    category: "Postres",
+    price: 4.29,
+    quantity: 18,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Café con leche",
+    category: "Bebidas",
+    price: 2.49,
+    quantity: 35,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Pastel de zanahoria",
+    category: "Postres",
+    price: 5.49,
+    quantity: 20,
+  },
+  {
+    img: "https://i.ytimg.com/vi/u4PZrUrlq9Q/sddefault.jpg?v=66e705da",
+    title: "Batido de vainilla",
+    category: "Bebidas",
+    price: 3.59,
+    quantity: 22,
+  },
+];
+
 function Test() {
   const filterContainer = useRef<HTMLDivElement>(null);
 
@@ -77,7 +172,7 @@ function Test() {
   };
 
   return (
-    <Box component="main" className="px-4">
+    <Box component="main" className="p-4">
       {/* Filter section */}
       <section
         ref={filterContainer}
@@ -106,6 +201,40 @@ function Test() {
         fullWidth
         sx={{ my: 2 }}
       />
+
+      {/* Products section */}
+      <section className="grid grid-cols-2 gap-4">
+        {products.map((prod: Product, index: number) => (
+          <Card key={index} sx={{ borderRadius: "10px" }}>
+            <img
+              src={prod.img}
+              title={prod.title}
+              className="h-24 w-full object-cover"
+            />
+            <CardContent sx={{ margin: 0 }} className="grid grid-cols-2">
+              <Typography
+                variant="subtitle1"
+                component="p"
+                className="col-span-full"
+              >
+                {prod.title}
+              </Typography>
+              <Typography variant="subtitle2" className="text-gray-400">
+                {prod.category}
+              </Typography>
+              <Typography
+                variant="button"
+                className="text-slate-900 font-bold text-right"
+              >
+                {prod.price.toLocaleString("es-PE", {
+                  style: "currency",
+                  currency: "PEN",
+                })}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
     </Box>
   );
 }
