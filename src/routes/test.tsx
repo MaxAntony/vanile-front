@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import CakeIcon from "@mui/icons-material/Cake";
 import { ComponentType, useRef } from "react";
@@ -97,6 +97,15 @@ function Test() {
           </div>
         ))}
       </section>
+
+      {/* Input search section */}
+      <TextField
+        id="outlined-basic"
+        label="Buscar productos"
+        variant="outlined"
+        fullWidth
+        sx={{ my: 2 }}
+      />
     </Box>
   );
 }
