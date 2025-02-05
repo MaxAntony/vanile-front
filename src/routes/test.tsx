@@ -1,11 +1,20 @@
 import { Box, Card, CardContent, TextField, Typography } from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import { createFileRoute, Link } from "@tanstack/react-router";
 import CakeIcon from "@mui/icons-material/Cake";
 import { ComponentType, useRef } from "react";
 
 export const Route = createFileRoute("/test")({
   component: Test,
 });
+
+const ROUTE_NAMES = {
+  DASHBOARD: {
+    TEST: "/test",
+    SALES: "/about",
+  },
+};
 
 type Filter = {
   icon: ComponentType;
@@ -172,69 +181,120 @@ function Test() {
   };
 
   return (
-    <Box component="main" className="p-4">
-      {/* Filter section */}
-      <section
-        ref={filterContainer}
-        className="flex bg-transparent overflow-x-auto mt-4 gap-x-4"
-      >
-        {filters.map((filter: Filter, index: number) => (
-          <div
-            key={index}
-            className="flex flex-col bg-white items-center justify-center cursor-pointer rounded-lg border border-blue-400 p-4 shadow-md"
-            onClick={(e) => scrollToElement(e)}
+    <>
+      <Box component="main" className="p-4 mb-16">
+        {/* Filter section */}
+        <section
+          ref={filterContainer}
+          className="flex bg-transparent overflow-x-auto mt-4 gap-x-4"
+        >
+          {filters.map((filter: Filter, index: number) => (
+            <div
+              key={index}
+              className="flex flex-col bg-white items-center justify-center cursor-pointer rounded-lg border border-blue-400 p-4 shadow-md"
+              onClick={(e) => scrollToElement(e)}
+            >
+              <filter.icon />
+              <span className="font-medium">{filter.title}</span>
+              <span className="text-xs text-gray-500 text-nowrap">
+                {filter.quantity} items
+              </span>
+            </div>
+          ))}
+        </section>
+
+        {/* Input search section */}
+        <TextField
+          id="outlined-basic"
+          label="Buscar productos"
+          variant="outlined"
+          fullWidth
+          sx={{ my: 2 }}
+        />
+
+        {/* Products section */}
+        <section className="grid grid-cols-2 gap-4">
+          {products.map((prod: Product, index: number) => (
+            <Card key={index} sx={{ borderRadius: "10px" }}>
+              <img
+                src={prod.img}
+                title={prod.title}
+                className="h-24 w-full object-cover"
+              />
+              <CardContent sx={{ margin: 0 }} className="grid grid-cols-2">
+                <Typography
+                  variant="subtitle1"
+                  component="p"
+                  className="col-span-full"
+                >
+                  {prod.title}
+                </Typography>
+                <Typography variant="subtitle2" className="text-gray-400">
+                  {prod.category}
+                </Typography>
+                <Typography
+                  variant="button"
+                  className="text-slate-900 font-bold text-right"
+                >
+                  {prod.price.toLocaleString("es-PE", {
+                    style: "currency",
+                    currency: "PEN",
+                  })}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+      </Box>
+
+      {/* Menu helper */}
+      <div className="fixed bottom-0 left-0 w-full border-t border-gray-200 shadow-lg bg-white rounded-t-3xl">
+        <div className="grid grid-cols-3">
+          <Link
+            to={ROUTE_NAMES.DASHBOARD.TEST}
+            className="flex flex-col items-center text-gray-600 transition-colors duration-200 p-3"
           >
-            <filter.icon />
-            <span className="font-medium">{filter.title}</span>
-            <span className="text-xs text-gray-500 text-nowrap">
-              {filter.quantity} items
-            </span>
-          </div>
-        ))}
-      </section>
-
-      {/* Input search section */}
-      <TextField
-        id="outlined-basic"
-        label="Buscar productos"
-        variant="outlined"
-        fullWidth
-        sx={{ my: 2 }}
-      />
-
-      {/* Products section */}
-      <section className="grid grid-cols-2 gap-4">
-        {products.map((prod: Product, index: number) => (
-          <Card key={index} sx={{ borderRadius: "10px" }}>
-            <img
-              src={prod.img}
-              title={prod.title}
-              className="h-24 w-full object-cover"
+            <ShoppingCartIcon
+              className={`${
+                location.pathname === ROUTE_NAMES.DASHBOARD.TEST &&
+                "text-blue-500"
+              }`}
             />
-            <CardContent sx={{ margin: 0 }} className="grid grid-cols-2">
-              <Typography
-                variant="subtitle1"
-                component="p"
-                className="col-span-full"
-              >
-                {prod.title}
-              </Typography>
-              <Typography variant="subtitle2" className="text-gray-400">
-                {prod.category}
-              </Typography>
-              <Typography
-                variant="button"
-                className="text-slate-900 font-bold text-right"
-              >
-                {prod.price.toLocaleString("es-PE", {
-                  style: "currency",
-                  currency: "PEN",
-                })}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
-    </Box>
+            <span
+              className={`mt-1 text-xs font-medium ${
+                location.pathname === ROUTE_NAMES.DASHBOARD.TEST &&
+                "text-blue-500"
+              }`}
+            >
+              POS
+            </span>
+          </Link>
+
+          <Link
+            to={ROUTE_NAMES.DASHBOARD.TEST}
+            className="flex flex-col items-center text-gray-600 transition-colors duration-200 p-3"
+          >
+            <AccessAlarmIcon
+              className={`${
+                location.pathname === ROUTE_NAMES.DASHBOARD.TEST &&
+                "text-blue-500"
+              }`}
+            />
+            <span
+              className={`mt-1 text-xs font-medium ${
+                location.pathname === ROUTE_NAMES.DASHBOARD.TEST &&
+                "text-blue-500"
+              }`}
+            >
+              Ventas
+            </span>
+          </Link>
+
+          <section className="flex flex-col justify-center items-center text-gray-600 p-3 bg-green-400 rounded-se-3xl">
+            <span className="font-bold text-xl">PAGAR</span>
+          </section>
+        </div>
+      </div>
+    </>
   );
 }
