@@ -96,7 +96,7 @@ export type AuthProfileResponse = {
 };
 
 export type CashRegister = {
-  status: "OPEN" | "CLOSE";
+  status: 'OPEN' | 'CLOSE';
   id: number;
   userId: number;
   openDate: string;
@@ -116,7 +116,7 @@ export type CloseCashRegisterDto = {
 };
 
 export type RegisterTransactionDto = {
-  type: "INCOME" | "EXPENSE";
+  type: 'INCOME' | 'EXPENSE';
   userId: number;
   amount: number;
   description: string;
@@ -126,7 +126,7 @@ export type UserFindAllData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/user";
+  url: '/user';
 };
 
 export type UserFindAllResponses = {
@@ -137,7 +137,7 @@ export type UserCreateData = {
   body: CreateUserDto;
   path?: never;
   query?: never;
-  url: "/user";
+  url: '/user';
 };
 
 export type UserCreateResponses = {
@@ -152,7 +152,7 @@ export type UserFindOneData = {
     email: string;
   };
   query?: never;
-  url: "/user/{email}";
+  url: '/user/{email}';
 };
 
 export type UserFindOneResponses = {
@@ -165,7 +165,7 @@ export type UserRemoveData = {
     id: string;
   };
   query?: never;
-  url: "/user/{id}";
+  url: '/user/{id}';
 };
 
 export type UserRemoveResponses = {
@@ -180,7 +180,7 @@ export type UserUpdateData = {
     id: string;
   };
   query?: never;
-  url: "/user/{id}";
+  url: '/user/{id}';
 };
 
 export type UserUpdateResponses = {
@@ -193,15 +193,14 @@ export type ItemFindAllData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/item";
+  url: '/item';
 };
 
 export type ItemFindAllResponses = {
   200: Array<Item>;
 };
 
-export type ItemFindAllResponse =
-  ItemFindAllResponses[keyof ItemFindAllResponses];
+export type ItemFindAllResponse = ItemFindAllResponses[keyof ItemFindAllResponses];
 
 export type ItemCreateData = {
   /**
@@ -210,7 +209,7 @@ export type ItemCreateData = {
   body: CreateItemDto;
   path?: never;
   query?: never;
-  url: "/item";
+  url: '/item';
 };
 
 export type ItemCreateErrors = {
@@ -233,7 +232,7 @@ export type ItemSearchData = {
      */
     query?: string;
   };
-  url: "/item/search";
+  url: '/item/search';
 };
 
 export type ItemSearchResponses = {
@@ -248,7 +247,7 @@ export type ItemRemoveData = {
     id: string;
   };
   query?: never;
-  url: "/item/{id}";
+  url: '/item/{id}';
 };
 
 export type ItemRemoveResponses = {
@@ -261,7 +260,7 @@ export type ItemFindOneData = {
     id: string;
   };
   query?: never;
-  url: "/item/{id}";
+  url: '/item/{id}';
 };
 
 export type ItemFindOneResponses = {
@@ -274,7 +273,7 @@ export type ItemUpdateData = {
     id: string;
   };
   query?: never;
-  url: "/item/{id}";
+  url: '/item/{id}';
 };
 
 export type ItemUpdateResponses = {
@@ -285,21 +284,20 @@ export type OrderFindAllData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/order";
+  url: '/order';
 };
 
 export type OrderFindAllResponses = {
   200: Array<GetOrder>;
 };
 
-export type OrderFindAllResponse =
-  OrderFindAllResponses[keyof OrderFindAllResponses];
+export type OrderFindAllResponse = OrderFindAllResponses[keyof OrderFindAllResponses];
 
 export type OrderCreateData = {
   body: CreateOrderDto;
   path?: never;
   query?: never;
-  url: "/order";
+  url: '/order';
 };
 
 export type OrderCreateResponses = {
@@ -308,8 +306,7 @@ export type OrderCreateResponses = {
   };
 };
 
-export type OrderCreateResponse =
-  OrderCreateResponses[keyof OrderCreateResponses];
+export type OrderCreateResponse = OrderCreateResponses[keyof OrderCreateResponses];
 
 export type OrderRemoveData = {
   body?: never;
@@ -317,15 +314,14 @@ export type OrderRemoveData = {
     id: string;
   };
   query?: never;
-  url: "/order/{id}";
+  url: '/order/{id}';
 };
 
 export type OrderRemoveResponses = {
   200: string;
 };
 
-export type OrderRemoveResponse =
-  OrderRemoveResponses[keyof OrderRemoveResponses];
+export type OrderRemoveResponse = OrderRemoveResponses[keyof OrderRemoveResponses];
 
 export type OrderFindOneData = {
   body?: never;
@@ -333,15 +329,14 @@ export type OrderFindOneData = {
     id: string;
   };
   query?: never;
-  url: "/order/{id}";
+  url: '/order/{id}';
 };
 
 export type OrderFindOneResponses = {
   200: string;
 };
 
-export type OrderFindOneResponse =
-  OrderFindOneResponses[keyof OrderFindOneResponses];
+export type OrderFindOneResponse = OrderFindOneResponses[keyof OrderFindOneResponses];
 
 export type OrderUpdateData = {
   body: UpdateOrderDto;
@@ -349,43 +344,40 @@ export type OrderUpdateData = {
     id: string;
   };
   query?: never;
-  url: "/order/{id}";
+  url: '/order/{id}';
 };
 
 export type OrderUpdateResponses = {
   200: string;
 };
 
-export type OrderUpdateResponse =
-  OrderUpdateResponses[keyof OrderUpdateResponses];
+export type OrderUpdateResponse = OrderUpdateResponses[keyof OrderUpdateResponses];
 
 export type AuthSignInData = {
   body: SignInDto;
   path?: never;
   query?: never;
-  url: "/auth/login";
+  url: '/auth/login';
 };
 
 export type AuthSignInResponses = {
   200: AuthSignInResponse;
 };
 
-export type AuthSignInResponse2 =
-  AuthSignInResponses[keyof AuthSignInResponses];
+export type AuthSignInResponse2 = AuthSignInResponses[keyof AuthSignInResponses];
 
 export type AuthGetProfileData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/auth/profile";
+  url: '/auth/profile';
 };
 
 export type AuthGetProfileResponses = {
   200: AuthProfileResponse;
 };
 
-export type AuthGetProfileResponse =
-  AuthGetProfileResponses[keyof AuthGetProfileResponses];
+export type AuthGetProfileResponse = AuthGetProfileResponses[keyof AuthGetProfileResponses];
 
 export type CashRegisterGetOpenCashRegisterData = {
   body?: never;
@@ -393,21 +385,20 @@ export type CashRegisterGetOpenCashRegisterData = {
     userId: number;
   };
   query?: never;
-  url: "/cash-register/open/{userId}";
+  url: '/cash-register/open/{userId}';
 };
 
 export type CashRegisterGetOpenCashRegisterResponses = {
   200: CashRegister;
 };
 
-export type CashRegisterGetOpenCashRegisterResponse =
-  CashRegisterGetOpenCashRegisterResponses[keyof CashRegisterGetOpenCashRegisterResponses];
+export type CashRegisterGetOpenCashRegisterResponse = CashRegisterGetOpenCashRegisterResponses[keyof CashRegisterGetOpenCashRegisterResponses];
 
 export type CashRegisterOpenData = {
   body: OpenCashRegisterDto;
   path?: never;
   query?: never;
-  url: "/cash-register/open";
+  url: '/cash-register/open';
 };
 
 export type CashRegisterOpenResponses = {
@@ -418,7 +409,7 @@ export type CashRegisterCloseData = {
   body: CloseCashRegisterDto;
   path?: never;
   query?: never;
-  url: "/cash-register/close";
+  url: '/cash-register/close';
 };
 
 export type CashRegisterCloseResponses = {
@@ -429,7 +420,7 @@ export type CashRegisterRegisterTransactionData = {
   body: RegisterTransactionDto;
   path?: never;
   query?: never;
-  url: "/cash-register/transaction";
+  url: '/cash-register/transaction';
 };
 
 export type CashRegisterRegisterTransactionResponses = {

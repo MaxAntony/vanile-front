@@ -1,5 +1,5 @@
-import { client } from "../api-client/client.gen";
-import { env } from "./envs";
+import { client } from '../api-client/client.gen';
+import { env } from './envs';
 
 client.setConfig({ baseUrl: env.VITE_API_URL });
 
