@@ -1,15 +1,15 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { createRoot } from "react-dom/client";
 import "./index.scss";
-import App from "./App.tsx";
+
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-
+const queryClient = new QueryClient();
 // Create a new router instance
 const router = createRouter({ routeTree });
 
@@ -26,9 +26,11 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
-      <CssBaseline />
-    </StrictMode>,
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <CssBaseline />
+      </QueryClientProvider>
+    </StrictMode>
   );
 }
 
