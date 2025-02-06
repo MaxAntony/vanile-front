@@ -1,17 +1,20 @@
-import { client } from "../api-client";
-import { env } from "./envs";
+import { client } from '../api-client/client.gen';
+import { env } from './envs';
 
 client.setConfig({ baseUrl: env.VITE_API_URL });
 
 client.interceptors.request.use((request) => {
-  request.headers.set(
-    "Authorization",
-    `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU2OGU4NDE5LWFlNWQtNGUxYy1hNTI3LWIyODk2M2FhMjFlYiIsImlhdCI6MTcyMjYxNjIyNywiZXhwIjoxNzIyNjIzNDI3fQ.yccEjhsuv9ayVojNM94m76ZzZ2r_VkAuy83GGv-CnXM`
-  );
+  // const authStore = useAuthStore();
+  // request.headers.set("Authorization", `Bearer ${authStore.token}`);
   return request;
 });
 
 client.interceptors.response.use((response) => {
+  // const { logout } = useAuthStore();
+  // if (response.status === 401) {
+  //   logout();
+  // }
+
   // trackAnalytics(response);
   return response;
 });
