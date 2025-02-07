@@ -1,4 +1,5 @@
-import { TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,7 +10,8 @@ import * as React from 'react';
 import * as yup from 'yup';
 import useProducts from '../../hooks/useProducts';
 
-export default function CreateProductDialog() {
+export default function UpdateProductDialog(id) {
+  const productId = id;
   const schema = yup.object().shape({
     productName: yup.string().min(3, 'El nombre debe tener al menos 3 caracteres').required('El nombre es obligatorio'),
 
@@ -18,18 +20,6 @@ export default function CreateProductDialog() {
       .typeError('El precio debe ser un número')
       .positive('El precio debe ser un número positivo')
       .required('El precio es obligatorio'),
-
-    productImage: yup
-      .mixed()
-      .required('La imagen es obligatoria')
-      .test('fileType', 'Solo se permiten imágenes (JPG, PNG, GIF)', (value) => {
-        if (!value || !(value instanceof File)) return false;
-        return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-      })
-      .test('fileSize', 'El tamaño máximo es 200MB', (value) => {
-        if (!value || !(value instanceof File)) return false;
-        return value.size <= 200 * 1024 * 1024;
-      }),
   });
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
@@ -37,7 +27,7 @@ export default function CreateProductDialog() {
     productPrice: '',
     productImage: new Blob(),
   });
-  const { itemCreate, refetch } = useProducts();
+  const { updateItem, refetch } = useProducts();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,15 +49,14 @@ export default function CreateProductDialog() {
 
   const handleSubmit = async () => {
     try {
-      console.log(formData);
       await schema.validate(formData, { abortEarly: false });
+      console.log(productId);
       console.log(formData);
-
-      itemCreate.mutate({
+      updateItem.mutate({
+        path: { id: `${productId.id}` },
         body: {
           name: formData.productName,
           price: parseFloat(formData.productPrice),
-          image: formData.productImage,
         },
       });
 
@@ -80,13 +69,13 @@ export default function CreateProductDialog() {
 
   return (
     <React.Fragment>
-      <Button variant='outlined' onClick={handleClickOpen}>
-        Nuevo Producto
-      </Button>
+      <IconButton aria-label='edit' size='large' onClick={handleClickOpen}>
+        <EditIcon fontSize='inherit' />
+      </IconButton>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Nuevo Producto</DialogTitle>
+        <DialogTitle>Editar Producto</DialogTitle>
         <DialogContent>
-          <DialogContentText>Ingrese los datos para el nuevo producto</DialogContentText>
+          <DialogContentText>Ingrese los nuevos datos para actualizar el producto</DialogContentText>
           <TextField
             autoFocus
             required
@@ -113,23 +102,11 @@ export default function CreateProductDialog() {
             value={formData.productPrice}
             onChange={handleChange}
           />
-          <p className='pt-3 text-gray-700'>Imagen del producto</p>
-          <TextField
-            autoFocus
-            required
-            margin='dense'
-            id='productImage'
-            name='productImage'
-            type='file'
-            fullWidth
-            variant='standard'
-            onChange={handleChange}
-          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button type='submit' onClick={handleSubmit}>
-            Crear Producto
+            Actualizar Producto
           </Button>
         </DialogActions>
       </Dialog>

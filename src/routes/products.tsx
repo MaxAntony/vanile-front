@@ -1,18 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
-import FormDialog from "../components/product/AddProductDialog";
-import TableProduct from "../components/product/TableProduct";
+import { createFileRoute } from '@tanstack/react-router';
+import CreateProductDialog from '../components/product/AddProductDialog';
+import TableProduct from '../components/product/TableProduct';
 
-export const Route = createFileRoute("/products")({
+export const Route = createFileRoute('/products')({
   component: Products,
 });
 
 function Products() {
   return (
-    <section className="p-5">
-      npm
-      <div className="flex justify-between mb-5">
-        <h3 className="text-2xl font-semibold">Productos</h3>
-        <FormDialog />
+    <section className='p-5'>
+      <div className='mb-5 flex justify-between'>
+        <h3 className='text-2xl font-semibold'>Productos</h3>
+        <CreateProductDialog />
       </div>
       <div>
         <TableProduct />
