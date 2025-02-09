@@ -18,8 +18,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import CakeIcon from "@mui/icons-material/Cake";
 import { ComponentType, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Item, itemSearch, OrderItem } from "../api-client";
+import { orderCreateMutation } from "../api-client/@tanstack/react-query.gen";
 
 export const Route = createFileRoute("/test")({
   component: Test,
@@ -90,6 +91,7 @@ function Test() {
   const [searchText, setSearchText] = useState<string>("");
 
   const { products } = useSearchProducts(searchText)
+  const createOrder = useMutation({ ...orderCreateMutation() });
 
   const totalPrice = useMemo<number>(() => {
     return cart.reduce((total, product) => {
@@ -165,6 +167,18 @@ function Test() {
         : item
     );
     setCart(updatedCart);
+  };
+
+  const submitOrder = () => {
+    createOrder.mutate(
+      { body: { items: cart, totalAmount: totalPrice } },
+      {
+        onSuccess: () => {
+          console.log("Salio bien")
+          setCart([])
+        },
+      },
+    );
   };
 
   return (
@@ -402,7 +416,8 @@ function Test() {
             <Button
               variant="contained"
               endIcon={<KeyboardArrowRightIcon />}
-              onClick={() => console.log(cart)}
+              onClick={submitOrder}
+              disabled={cart.length === 0}
             >
               Confirmar
             </Button>
