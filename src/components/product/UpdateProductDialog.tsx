@@ -27,7 +27,7 @@ export default function UpdateProductDialog(id) {
     productPrice: '',
     productImage: new Blob(),
   });
-  const { updateItem, refetch } = useProducts();
+  const { updateItem } = useProducts();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -61,7 +61,6 @@ export default function UpdateProductDialog(id) {
       });
 
       handleClose();
-      refetch();
     } catch (err) {
       console.log('error' + err.errors);
     }

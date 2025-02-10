@@ -37,7 +37,7 @@ export default function CreateProductDialog() {
     productPrice: '',
     productImage: new Blob(),
   });
-  const { itemCreate, refetch } = useProducts();
+  const { itemCreate } = useProducts();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -70,9 +70,7 @@ export default function CreateProductDialog() {
           image: formData.productImage,
         },
       });
-
       handleClose();
-      refetch();
     } catch (err) {
       console.log('error' + err.errors);
     }
