@@ -20,8 +20,11 @@
     "@mui/material": "^6.4.2",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-router": "^1.99.0",
+    "dotenv": "^16.4.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.54.2",
+    "yup": "^1.6.1",
     "zod": "^3.24.1",
     "zustand": "^5.0.3"
   },
@@ -41,15 +44,16 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "postcss": "^8.5.1",
-    "sass-embedded": "^1.83.4",
     "prettier": "^3.4.2",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "sass-embedded": "^1.83.4",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5"
-  }
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }
