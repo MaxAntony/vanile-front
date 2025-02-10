@@ -17,7 +17,10 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import CakeIcon from "@mui/icons-material/Cake";
-import { ComponentType, useMemo, useRef, useState } from "react";
+import { ComponentType, useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Item, itemSearch, OrderItem } from "../api-client";
+import { orderCreateMutation } from "../api-client/@tanstack/react-query.gen";
 
 export const Route = createFileRoute("/test")({
   component: Test,
@@ -81,135 +84,14 @@ const filters: Filter[] = [
   },
 ];
 
-// Productos
-type Product = {
-  id: number;
-  imageUrl: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-};
-
-const products: Product[] = [
-  {
-    id: 1,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Tarta de manzana",
-    category: "Postres",
-    price: 5.99,
-    stock: 12,
-  },
-  {
-    id: 2,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Chocolate caliente",
-    category: "Bebidas",
-    price: 2.49,
-    stock: 25,
-  },
-  {
-    id: 3,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Galletas de avena",
-    category: "Postres",
-    price: 3.99,
-    stock: 30,
-  },
-  {
-    id: 4,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Café espresso",
-    category: "Bebidas",
-    price: 1.99,
-    stock: 50,
-  },
-  {
-    id: 5,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Tiramisu",
-    category: "Postres",
-    price: 6.49,
-    stock: 15,
-  },
-  {
-    id: 6,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Limonada natural",
-    category: "Bebidas",
-    price: 2.79,
-    stock: 40,
-  },
-  {
-    id: 7,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Cheesecake de frutos rojos",
-    category: "Postres",
-    price: 7.99,
-    stock: 8,
-  },
-  {
-    id: 8,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Mojito",
-    category: "Bebidas",
-    price: 4.99,
-    stock: 10,
-  },
-  {
-    id: 9,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Brownie de chocolate",
-    category: "Postres",
-    price: 4.29,
-    stock: 18,
-  },
-  {
-    id: 10,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Café con leche",
-    category: "Bebidas",
-    price: 2.49,
-    stock: 35,
-  },
-  {
-    id: 11,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Pastel de zanahoria",
-    category: "Postres",
-    price: 5.49,
-    stock: 20,
-  },
-  {
-    id: 12,
-    imageUrl:
-      "https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg",
-    name: "Batido de vainilla",
-    category: "Bebidas",
-    price: 3.59,
-    stock: 22,
-  },
-];
-
-interface CartItem extends Product {
-  quantity: number;
-}
-
 function Test() {
   const filterContainer = useRef<HTMLDivElement>(null);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<(OrderItem & Item)[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+
+  const { products } = useSearchProducts(searchText)
+  const createOrder = useMutation({ ...orderCreateMutation() });
 
   const totalPrice = useMemo<number>(() => {
     return cart.reduce((total, product) => {
@@ -248,7 +130,7 @@ function Test() {
       setOpenDrawer(open);
     };
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Item) => {
     // Busca si el producto ya está en el carrito
     const existingItem = cart.find((item) => item.id === product.id);
 
@@ -269,21 +151,34 @@ function Test() {
     setCart(updatedCart);
   };
 
-  const modifyQuantity = (prod: CartItem, quantity: number) => {
+  const modifyQuantity = (prod: OrderItem, quantity: number) => {
+    // Función auxiliar para calcular la nueva cantidad
+    const calculateNewQuantity = (item: (OrderItem & Item), newQuantity: number) => {
+      if(newQuantity === 0) return ""
+      if (newQuantity < 1) return 1;
+      // if (item.stock < newQuantity) return item.quantity;
+      return newQuantity;
+    };
+
+    // Actualizar el carrito
     const updatedCart = cart.map((item) =>
       item.id === prod.id
-        ? {
-            ...item,
-            quantity:
-              quantity < 1
-                ? 1
-                : item.stock < quantity
-                  ? item.quantity
-                  : quantity,
-          }
+        ? { ...item, quantity: calculateNewQuantity(item, quantity) as number }
         : item
     );
     setCart(updatedCart);
+  };
+
+  const submitOrder = () => {
+    createOrder.mutate(
+      { body: { items: cart, totalAmount: totalPrice } },
+      {
+        onSuccess: () => {
+          console.log("Salio bien")
+          setCart([])
+        },
+      },
+    );
   };
 
   return (
@@ -311,6 +206,7 @@ function Test() {
 
         {/* Input search section */}
         <TextField
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
           id="outlined-basic"
           label="Buscar productos"
           variant="outlined"
@@ -320,7 +216,7 @@ function Test() {
 
         {/* Products section */}
         <section className="grid grid-cols-2 gap-4">
-          {products.map((prod: Product, index: number) => (
+          {products?.map((prod: Item, index: number) => (
             <Card
               key={index}
               sx={{ borderRadius: "10px" }}
@@ -341,7 +237,7 @@ function Test() {
                   {prod.name}
                 </Typography>
                 <Typography variant="subtitle2" className="text-gray-400">
-                  {prod.category}
+                  {/* {prod.category} */} Postre
                 </Typography>
                 <Typography
                   variant="button"
@@ -353,7 +249,7 @@ function Test() {
                   })}
                 </Typography>
                 <span className="absolute top-0 right-0 bg-blue-600 text-white font-bold rounded-full py-1 px-2 text-center">
-                  {prod.stock}
+                  {/* {prod.stock} */} 27
                 </span>
               </CardContent>
             </Card>
@@ -425,7 +321,7 @@ function Test() {
         </Typography>
 
         <Box component="section" className="overflow-y-auto p-4">
-          {cart.map((prod: CartItem) => (
+          {cart.map((prod: (OrderItem & Item)) => (
             <Card key={prod.id} className="relative flex border-b mb-1">
               <img
                 src={prod.imageUrl}
@@ -520,7 +416,8 @@ function Test() {
             <Button
               variant="contained"
               endIcon={<KeyboardArrowRightIcon />}
-              onClick={() => console.log(cart)}
+              onClick={submitOrder}
+              disabled={cart.length === 0}
             >
               Confirmar
             </Button>
@@ -530,3 +427,46 @@ function Test() {
     </>
   );
 }
+
+// Custom Hook useDebounce
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
+// Custom Hook useSearchProducts
+const useSearchProducts = (initialSearchText: string) => {
+  const debouncedSearchText = useDebounce<string>(initialSearchText, 300); // Debounce de 300 ms
+
+  // Consulta para buscar productos
+  const {
+    data: products,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['item', 'search', debouncedSearchText],
+    queryFn: async () => {
+      const response = await itemSearch({ query: { query: debouncedSearchText } });
+      return response.data;
+    },
+  });
+
+  return {
+    products,
+    isLoading,
+    isError,
+    error,
+  };
+};
