@@ -10,6 +10,7 @@ import {
   Alert,
   Box,
   Button,
+  ButtonBase,
   Card,
   CardContent,
   Fade,
@@ -216,14 +217,12 @@ function Test() {
         {/* Filter section */}
         <section ref={filterContainer} className='mt-4 flex gap-x-4 overflow-x-auto bg-transparent'>
           {filters.map((filter: Filter, index: number) => (
-            <div
-              key={index}
-              className='flex cursor-pointer flex-col items-center justify-center rounded-lg border border-blue-400 bg-white p-4 shadow-md'
-              onClick={(e) => scrollToElement(e)}
-            >
-              <filter.icon />
-              <span className='font-medium'>{filter.title}</span>
-              <span className='text-nowrap text-xs text-gray-500'>{filter.quantity} items</span>
+            <div key={index} className='rounded-lg border border-gray-600 bg-white shadow-md' onClick={(e) => scrollToElement(e)}>
+              <ButtonBase className='flex flex-col p-4' sx={{ padding: '10px' }}>
+                <filter.icon />
+                <span className='font-medium'>{filter.title}</span>
+                <span className='text-nowrap text-xs text-gray-500'>{filter.quantity} items</span>
+              </ButtonBase>
             </div>
           ))}
         </section>
@@ -240,27 +239,29 @@ function Test() {
 
         {/* Products section */}
         <section className='grid grid-cols-2 gap-4'>
-          {products?.map((prod: Item, index: number) => (
-            <Card key={index} sx={{ borderRadius: '10px' }} className='relative' onClick={() => addToCart(prod)}>
-              <img src={prod.imageUrl} title={prod.name} className='h-24 w-full object-cover' />
-              <CardContent sx={{ margin: 0 }} className='grid grid-cols-2'>
-                <Typography variant='subtitle1' component='p' className='col-span-full'>
-                  {prod.name}
-                </Typography>
-                <Typography variant='subtitle2' className='text-gray-400'>
-                  {/* {prod.category} */} Postre
-                </Typography>
-                <Typography variant='button' className='text-right font-bold text-slate-900'>
-                  {prod.price.toLocaleString('es-PE', {
-                    style: 'currency',
-                    currency: 'PEN',
-                  })}
-                </Typography>
-                <span className='absolute right-0 top-0 rounded-full bg-blue-600 px-2 py-1 text-center font-bold text-white'>
-                  {/* {prod.stock} */} 27
-                </span>
-              </CardContent>
-            </Card>
+          {products?.map((prod: Item) => (
+            <ButtonBase key={prod.id} focusRipple>
+              <Card sx={{ borderRadius: '10px' }} className='relative w-full' onClick={() => addToCart(prod)}>
+                <img src={prod.imageUrl} title={prod.name} className='h-24 w-full object-cover' />
+                <CardContent sx={{ margin: 0 }} className='grid grid-cols-2'>
+                  <Typography variant='subtitle1' component='p' className='col-span-full'>
+                    {prod.name}
+                  </Typography>
+                  <Typography variant='subtitle2' className='text-gray-400'>
+                    {/* {prod.category} */} Postre
+                  </Typography>
+                  <Typography variant='button' className='text-right font-bold text-slate-900'>
+                    {prod.price.toLocaleString('es-PE', {
+                      style: 'currency',
+                      currency: 'PEN',
+                    })}
+                  </Typography>
+                  <span className='absolute right-0 top-0 rounded-full bg-blue-600 px-2 py-1 text-center font-bold text-white'>
+                    {/* {prod.stock} */} 27
+                  </span>
+                </CardContent>
+              </Card>
+            </ButtonBase>
           ))}
         </section>
       </Box>
@@ -278,9 +279,11 @@ function Test() {
             <span className={`mt-1 text-xs font-medium ${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`}>Ventas</span>
           </Link>
 
-          <section className='flex flex-col items-center justify-center rounded-se-3xl bg-green-400 p-3 text-gray-600' onClick={toggleDrawer(true)}>
-            <span className='text-xl font-bold'>PAGAR</span>
-          </section>
+          <ButtonBase onClick={toggleDrawer(true)} focusRipple>
+            <section className='flex size-full flex-col items-center justify-center rounded-se-3xl bg-green-400 text-gray-600'>
+              <span className='text-xl font-bold'>PAGAR</span>
+            </section>
+          </ButtonBase>
         </div>
       </div>
 
@@ -299,7 +302,7 @@ function Test() {
                 <Typography component='div' variant='h6'>
                   {prod.name}
                 </Typography>
-                <Typography variant='body1' component='div' sx={{ color: 'text.secondary' }}>
+                <Typography variant='caption' component='div' sx={{ color: 'text.secondary' }} className=' text-nowrap'>
                   Precio unitario:{' '}
                   {prod.price.toLocaleString('es-PE', {
                     style: 'currency',
@@ -326,7 +329,7 @@ function Test() {
                   <IconButton onClick={() => modifyQuantity(prod, prod.quantity + 1)} color='primary' size='small'>
                     <Add />
                   </IconButton>
-                  <Typography variant='body1' component='div' className='col-span-2 text-center'>
+                  <Typography variant='caption' component='div' className='col-span-2 text-center'>
                     {/* Total: ${(prod.price * quantities[index]).toFixed(2)} */}
                     {(prod.price * prod.quantity).toLocaleString('es-PE', {
                       style: 'currency',
@@ -335,7 +338,10 @@ function Test() {
                   </Typography>
                 </Box>
               </CardContent>
-              <DeleteIcon className='absolute right-0 top-0 m-1 text-red-500' onClick={() => removeFromCart(prod)} />
+              <ButtonBase focusRipple>
+              {/* onClick={() => removeFromCart(prod)} */}
+              <DeleteIcon className='right-0 top-0 m-1 text-red-500'  />
+              </ButtonBase>
             </Card>
           ))}
 
