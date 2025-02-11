@@ -1,37 +1,55 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import CssBaseline from '@mui/material/CssBaseline';
 import './index.scss';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
+import { AuthProvider, useAuth } from './auth';
 import './config/api';
 import { routeTree } from './routeTree.gen';
 
-// Create a new router instance
-const router = createRouter({ routeTree });
-
-// Register the router instance for type safety
+const queryClient = new QueryClient();
+const router = createRouter({
+  routeTree,
+  defaultPreload: 'intent',
+  scrollRestoration: true,
+  context: {
+    auth: undefined!,
+  },
+});
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
   }
 }
 
-const queryClient = new QueryClient();
+function InnerApp() {
+  const auth = useAuth();
+  return (
+    <>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} context={{ auth }} />;
+      </QueryClientProvider>
+    </>
+  );
+}
 
-// Render the app
+function App() {
+  return (
+    <AuthProvider>
+      <InnerApp />
+    </AuthProvider>
+  );
+}
+
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-      <CssBaseline />
+      <App />
     </StrictMode>,
   );
 }
