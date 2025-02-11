@@ -11,19 +11,24 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TestImport } from './routes/test'
-import { Route as ProductsImport } from './routes/products'
-import { Route as AboutImport } from './routes/about'
+import { Route as ZtestImport } from ./routes/z_testest'
+import { Route as ProductsImport } from './routes/z_products'
+import { Route as PosImport } from './routes/pos'
+import { Route as DashboardImport } from './routes/dashboard'
+import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthLayoutImport } from './routes/_auth/_layout'
-import { Route as AuthLayoutRegisterImport } from './routes/_auth/_layout/register'
-import { Route as AuthLayoutLoginImport } from './routes/_auth/_layout/login'
+import { Route as PosIndexImport } from './routes/pos.index'
+import { Route as DashboardIndexImport } from './routes/dashboard.index'
+import { Route as DashboardSalesImport } from './routes/dashboard.sales'
+import { Route as DashboardProductsImport } from './routes/dashboard.products'
+import { Route as AuthRegisterImport } from './routes/_auth.register'
+import { Route as AuthLoginImport } from './routes/_auth.login'
 
 // Create/Update Routes
 
-const TestRoute = TestImport.update({
-  id: '/test',
-  path: '/test',
+const ZtestRoute = ZtestImport.update({
+  id: '/z_test',
+  path: '/z_test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -33,9 +38,20 @@ const ProductsRoute = ProductsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const PosRoute = PosImport.update({
+  id: '/pos',
+  path: '/pos',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -45,21 +61,40 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthLayoutRoute = AuthLayoutImport.update({
-  id: '/_auth/_layout',
-  getParentRoute: () => rootRoute,
+const PosIndexRoute = PosIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PosRoute,
 } as any)
 
-const AuthLayoutRegisterRoute = AuthLayoutRegisterImport.update({
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardSalesRoute = DashboardSalesImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardProductsRoute = DashboardProductsImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const AuthRegisterRoute = AuthRegisterImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
+const AuthLoginRoute = AuthLoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -73,11 +108,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/pos': {
+      id: '/pos'
+      path: '/pos'
+      fullPath: '/pos'
+      preLoaderRoute: typeof PosImport
       parentRoute: typeof rootRoute
     }
     '/products': {
@@ -87,122 +136,202 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsImport
       parentRoute: typeof rootRoute
     }
-    '/test': {
-      id: '/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof TestImport
+    '/z_test': {
+      id: '/z_test'
+      path: '/z_test'
+      fullPath: '/z_test'
+      preLoaderRoute: typeof ZtestImport
       parentRoute: typeof rootRoute
     }
-    '/_auth/_layout': {
-      id: '/_auth/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthLayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth/_layout/login': {
-      id: '/_auth/_layout/login'
+    '/_auth/login': {
+      id: '/_auth/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof AuthLayoutLoginImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof AuthImport
     }
-    '/_auth/_layout/register': {
-      id: '/_auth/_layout/register'
+    '/_auth/register': {
+      id: '/_auth/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof AuthLayoutRegisterImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof AuthImport
+    }
+    '/dashboard/products': {
+      id: '/dashboard/products'
+      path: '/products'
+      fullPath: '/dashboard/products'
+      preLoaderRoute: typeof DashboardProductsImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/sales': {
+      id: '/dashboard/sales'
+      path: '/sales'
+      fullPath: '/dashboard/sales'
+      preLoaderRoute: typeof DashboardSalesImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof DashboardImport
+    }
+    '/pos/': {
+      id: '/pos/'
+      path: '/'
+      fullPath: '/pos/'
+      preLoaderRoute: typeof PosIndexImport
+      parentRoute: typeof PosImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthLayoutRouteChildren {
-  AuthLayoutLoginRoute: typeof AuthLayoutLoginRoute
-  AuthLayoutRegisterRoute: typeof AuthLayoutRegisterRoute
+interface AuthRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
-const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
-  AuthLayoutLoginRoute: AuthLayoutLoginRoute,
-  AuthLayoutRegisterRoute: AuthLayoutRegisterRoute,
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
 }
 
-const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
-  AuthLayoutRouteChildren,
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardProductsRoute: typeof DashboardProductsRoute
+  DashboardSalesRoute: typeof DashboardSalesRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardProductsRoute: DashboardProductsRoute,
+  DashboardSalesRoute: DashboardSalesRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
 )
+
+interface PosRouteChildren {
+  PosIndexRoute: typeof PosIndexRoute
+}
+
+const PosRouteChildren: PosRouteChildren = {
+  PosIndexRoute: PosIndexRoute,
+}
+
+const PosRouteWithChildren = PosRoute._addFileChildren(PosRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '': typeof AuthRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/pos': typeof PosRouteWithChildren
   '/products': typeof ProductsRoute
-  '/test': typeof TestRoute
-  '': typeof AuthLayoutRouteWithChildren
-  '/login': typeof AuthLayoutLoginRoute
-  '/register': typeof AuthLayoutRegisterRoute
+  '/z_test': typeof ZtestRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
+  '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/pos/': typeof PosIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '': typeof AuthRouteWithChildren
   '/products': typeof ProductsRoute
-  '/test': typeof TestRoute
-  '': typeof AuthLayoutRouteWithChildren
-  '/login': typeof AuthLayoutLoginRoute
-  '/register': typeof AuthLayoutRegisterRoute
+  '/z_test': typeof ZtestRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
+  '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/pos': typeof PosIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/pos': typeof PosRouteWithChildren
   '/products': typeof ProductsRoute
-  '/test': typeof TestRoute
-  '/_auth/_layout': typeof AuthLayoutRouteWithChildren
-  '/_auth/_layout/login': typeof AuthLayoutLoginRoute
-  '/_auth/_layout/register': typeof AuthLayoutRegisterRoute
+  '/z_test': typeof ZtestRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/register': typeof AuthRegisterRoute
+  '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/pos/': typeof PosIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
-    | '/products'
-    | '/test'
     | ''
+    | '/dashboard'
+    | '/pos'
+    | '/products'
+    | '/z_test'
     | '/login'
     | '/register'
+    | '/dashboard/products'
+    | '/dashboard/sales'
+    | '/dashboard/'
+    | '/pos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/products' | '/test' | '' | '/login' | '/register'
+  to:
+    | '/'
+    | ''
+    | '/products'
+    | '/z_test'
+    | '/login'
+    | '/register'
+    | '/dashboard/products'
+    | '/dashboard/sales'
+    | '/dashboard'
+    | '/pos'
   id:
     | '__root__'
     | '/'
-    | '/about'
+    | '/_auth'
+    | '/dashboard'
+    | '/pos'
     | '/products'
-    | '/test'
-    | '/_auth/_layout'
-    | '/_auth/_layout/login'
-    | '/_auth/_layout/register'
+    | '/z_test'
+    | '/_auth/login'
+    | '/_auth/register'
+    | '/dashboard/products'
+    | '/dashboard/sales'
+    | '/dashboard/'
+    | '/pos/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
+  PosRoute: typeof PosRouteWithChildren
   ProductsRoute: typeof ProductsRoute
-  TestRoute: typeof TestRoute
-  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+  ZtestRoute: typeof ZtestRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  AuthRoute: AuthRouteWithChildren,
+  DashboardRoute: DashboardRouteWithChildren,
+  PosRoute: PosRouteWithChildren,
   ProductsRoute: ProductsRoute,
-  TestRoute: TestRoute,
-  AuthLayoutRoute: AuthLayoutRouteWithChildren,
+  ZtestRoute: ZtestRoute,
 }
 
 export const routeTree = rootRoute
@@ -216,38 +345,66 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about",
+        "/_auth",
+        "/dashboard",
+        "/pos",
         "/products",
-        "/test",
-        "/_auth/_layout"
+        "/z_test"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/login",
+        "/_auth/register"
+      ]
+    },
+    "/dashboard": {
+      "filePath": "dashboard.tsx",
+      "children": [
+        "/dashboard/products",
+        "/dashboard/sales",
+        "/dashboard/"
+      ]
+    },
+    "/pos": {
+      "filePath": "pos.tsx",
+      "children": [
+        "/pos/"
+      ]
     },
     "/products": {
       "filePath": "products.tsx"
     },
-    "/test": {
-      "filePath": "test.tsx"
+    "/z_test": {
+      "filePath": "z_test.tsx"
     },
-    "/_auth/_layout": {
-      "filePath": "_auth/_layout.tsx",
-      "children": [
-        "/_auth/_layout/login",
-        "/_auth/_layout/register"
-      ]
+    "/_auth/login": {
+      "filePath": "_auth.login.tsx",
+      "parent": "/_auth"
     },
-    "/_auth/_layout/login": {
-      "filePath": "_auth/_layout/login.tsx",
-      "parent": "/_auth/_layout"
+    "/_auth/register": {
+      "filePath": "_auth.register.tsx",
+      "parent": "/_auth"
     },
-    "/_auth/_layout/register": {
-      "filePath": "_auth/_layout/register.tsx",
-      "parent": "/_auth/_layout"
+    "/dashboard/products": {
+      "filePath": "dashboard.products.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/sales": {
+      "filePath": "dashboard.sales.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard.index.tsx",
+      "parent": "/dashboard"
+    },
+    "/pos/": {
+      "filePath": "pos.index.tsx",
+      "parent": "/pos"
     }
   }
 }
