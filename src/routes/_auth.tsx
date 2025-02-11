@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import AuthLayout from '../layouts/AuthLayout'; // Import correcto
 
 function AuthWrapper() {
@@ -10,5 +10,12 @@ function AuthWrapper() {
 }
 
 export const Route = createFileRoute('/_auth')({
+  beforeLoad: ({ context }) => {
+    if (context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/dashboard',
+      });
+    }
+  },
   component: AuthWrapper, // Ahora usa el nombre corregido
 });
