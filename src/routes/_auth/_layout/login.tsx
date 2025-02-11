@@ -2,6 +2,7 @@ import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useAuth } from '../../../contexts/auth';
 
 interface LoginFormData {
   email: string;
@@ -21,6 +22,8 @@ function LoginComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const auth = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,8 +51,8 @@ function LoginComponent() {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 4) {
+      newErrors.password = 'Password must be at least 4 characters';
     }
 
     setErrors(newErrors);
@@ -65,7 +68,7 @@ function LoginComponent() {
     try {
       // Add your login logic here
       console.log('Login attempted with:', formData);
-
+      await auth?.login({ email: formData.email, password: formData.password });
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
