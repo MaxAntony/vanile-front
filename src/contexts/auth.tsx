@@ -7,6 +7,7 @@ export interface AuthContext {
   login: (credentials: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
   user: User | null;
+  token: string | null;
 }
 
 const localStorageConstants = { jwtName: 'jwt' };
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  return <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isAuthenticated, user, login, logout, token }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => React.useContext(AuthContext);

@@ -1,6 +1,6 @@
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuth } from '../contexts/auth';
 
@@ -24,6 +24,7 @@ function LoginComponent() {
   const [isLoading, setIsLoading] = useState(false);
 
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,7 +32,6 @@ function LoginComponent() {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name as keyof LoginFormData]) {
       setErrors((prev) => ({
         ...prev,
@@ -66,17 +66,13 @@ function LoginComponent() {
 
     setIsLoading(true);
     try {
-      // Add your login logic here
       console.log('Login attempted with:', formData);
       await auth?.login({ email: formData.email, password: formData.password });
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Handle successful login
-      // Example: navigate('/dashboard');
+      navigate({
+        to: '/dashboard',
+      });
     } catch (error) {
       console.error('Login error:', error);
-      // Handle error appropriately
     } finally {
       setIsLoading(false);
     }
