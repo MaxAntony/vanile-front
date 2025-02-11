@@ -7,19 +7,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
-import * as yup from 'yup';
+import z from 'zod';
 import useProducts from '../../hooks/useProducts';
 
 export default function UpdateProductDialog(id) {
   const productId = id;
-  const schema = yup.object().shape({
-    productName: yup.string().min(3, 'El nombre debe tener al menos 3 caracteres').required('El nombre es obligatorio'),
+  const schema = z.object({
+    productName: z
+      .string()
+      .min(3, { message: 'El nombre debe tener al menos 3 caracteres' })
+      .refine((value) => value.trim().length > 0, { message: 'El nombre es obligatorio' }),
 
-    productPrice: yup
-      .number()
-      .typeError('El precio debe ser un número')
-      .positive('El precio debe ser un número positivo')
-      .required('El precio es obligatorio'),
+    productPrice: z
+      .string()
+      .refine((value) => !isNaN(Number(value)), { message: 'El precio debe ser un número válido' })
+      .refine((value) => Number(value) > 0, { message: 'El precio debe ser un número positivo' }),
   });
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
@@ -49,7 +51,7 @@ export default function UpdateProductDialog(id) {
 
   const handleSubmit = async () => {
     try {
-      await schema.validate(formData, { abortEarly: false });
+      schema.parse(formData);
       console.log(productId);
       console.log(formData);
       updateItem.mutate({
@@ -62,7 +64,10 @@ export default function UpdateProductDialog(id) {
 
       handleClose();
     } catch (err) {
-      console.log('error' + err.errors);
+      console.log('Error:', err);
+      if (err instanceof z.ZodError) {
+        console.log('Errores de validación:', err.errors);
+      }
     }
   };
 

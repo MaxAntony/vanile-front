@@ -11,8 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ZtestImport } from ./routes/z_testest'
-import { Route as ProductsImport } from './routes/z_products'
+import { Route as ZtestImport } from './routes/z_test'
+import { Route as ZproductsImport } from './routes/z_products'
 import { Route as PosImport } from './routes/pos'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as AuthImport } from './routes/_auth'
@@ -32,9 +32,9 @@ const ZtestRoute = ZtestImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProductsRoute = ProductsImport.update({
-  id: '/products',
-  path: '/products',
+const ZproductsRoute = ZproductsImport.update({
+  id: '/z_products',
+  path: '/z_products',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -129,11 +129,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PosImport
       parentRoute: typeof rootRoute
     }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsImport
+    '/z_products': {
+      id: '/z_products'
+      path: '/z_products'
+      fullPath: '/z_products'
+      preLoaderRoute: typeof ZproductsImport
       parentRoute: typeof rootRoute
     }
     '/z_test': {
@@ -233,7 +233,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/pos': typeof PosRouteWithChildren
-  '/products': typeof ProductsRoute
+  '/z_products': typeof ZproductsRoute
   '/z_test': typeof ZtestRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -246,7 +246,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthRouteWithChildren
-  '/products': typeof ProductsRoute
+  '/z_products': typeof ZproductsRoute
   '/z_test': typeof ZtestRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -262,7 +262,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/pos': typeof PosRouteWithChildren
-  '/products': typeof ProductsRoute
+  '/z_products': typeof ZproductsRoute
   '/z_test': typeof ZtestRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
@@ -279,7 +279,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/pos'
-    | '/products'
+    | '/z_products'
     | '/z_test'
     | '/login'
     | '/register'
@@ -291,7 +291,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
-    | '/products'
+    | '/z_products'
     | '/z_test'
     | '/login'
     | '/register'
@@ -305,7 +305,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/dashboard'
     | '/pos'
-    | '/products'
+    | '/z_products'
     | '/z_test'
     | '/_auth/login'
     | '/_auth/register'
@@ -321,7 +321,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   PosRoute: typeof PosRouteWithChildren
-  ProductsRoute: typeof ProductsRoute
+  ZproductsRoute: typeof ZproductsRoute
   ZtestRoute: typeof ZtestRoute
 }
 
@@ -330,7 +330,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   PosRoute: PosRouteWithChildren,
-  ProductsRoute: ProductsRoute,
+  ZproductsRoute: ZproductsRoute,
   ZtestRoute: ZtestRoute,
 }
 
@@ -348,7 +348,7 @@ export const routeTree = rootRoute
         "/_auth",
         "/dashboard",
         "/pos",
-        "/products",
+        "/z_products",
         "/z_test"
       ]
     },
@@ -376,8 +376,8 @@ export const routeTree = rootRoute
         "/pos/"
       ]
     },
-    "/products": {
-      "filePath": "products.tsx"
+    "/z_products": {
+      "filePath": "z_products.tsx"
     },
     "/z_test": {
       "filePath": "z_test.tsx"
