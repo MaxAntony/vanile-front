@@ -29,11 +29,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (credentials: { email: string; password: string }) => {
     try {
       const { data } = await authSignIn({ body: { email: credentials.email, password: credentials.password } });
+      console.log(data);
       if (data?.access_token) {
         setToken(data.access_token);
         setIsAuthenticated(true);
         localStorage.setItem(localStorageConstants.jwtName, data.access_token);
-        console.log('vamos bien');
         await fetchUser();
       } else {
         throw new Error('Error en la autenticación');
