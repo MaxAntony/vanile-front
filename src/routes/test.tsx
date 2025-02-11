@@ -302,7 +302,7 @@ function Test() {
                 <Typography component='div' variant='h6'>
                   {prod.name}
                 </Typography>
-                <Typography variant='caption' component='div' sx={{ color: 'text.secondary' }} className=' text-nowrap'>
+                <Typography variant='caption' component='div' sx={{ color: 'text.secondary' }} className='text-nowrap'>
                   Precio unitario:{' '}
                   {prod.price.toLocaleString('es-PE', {
                     style: 'currency',
@@ -338,9 +338,8 @@ function Test() {
                   </Typography>
                 </Box>
               </CardContent>
-              <ButtonBase focusRipple>
-              {/* onClick={() => removeFromCart(prod)} */}
-              <DeleteIcon className='right-0 top-0 m-1 text-red-500'  />
+              <ButtonBase onClick={() => removeFromCart(prod)} focusRipple>
+                <DeleteIcon className='right-0 top-0 m-1 text-red-500' />
               </ButtonBase>
             </Card>
           ))}
