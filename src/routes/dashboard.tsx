@@ -1,18 +1,15 @@
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard')({
-  // beforeLoad: ({ context, location }) => {
-  //   if (!context.auth.isAuthenticated) {
-  //     throw redirect({
-  //       to: '/',
-  //       search: {
-  //         redirect: location.href,
-  //       },
-  //     });
-  //   }
-  // },
+  beforeLoad: ({ context }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/',
+      });
+    }
+  },
   component: RouteComponent,
 });
 
