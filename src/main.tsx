@@ -6,8 +6,8 @@ import './index.scss';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-import { AuthProvider, useAuth } from './auth';
 import './config/api';
+import { AuthProvider, useAuth } from './contexts/auth';
 import { routeTree } from './routeTree.gen';
 
 const queryClient = new QueryClient();
