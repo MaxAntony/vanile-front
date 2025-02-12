@@ -2,7 +2,7 @@ import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useAuth } from '../contexts/auth';
+import { useAuthStore } from '../contexts/auth';
 
 interface LoginFormData {
   email: string;
@@ -23,7 +23,7 @@ function LoginComponent() {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const auth = useAuth();
+  const auth = useAuthStore();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

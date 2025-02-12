@@ -1,41 +1,33 @@
-// import { useNavigate } from '@tanstack/react-router';
-import * as React from 'react';
+import { create } from 'zustand';
 import { authGetProfile, authSignIn } from '../api-client';
 
-export interface AuthContext {
-  isAuthenticated: boolean;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
-  logout: () => Promise<void>;
-  user: User | null;
-  token: string | null;
-}
-
 const localStorageConstants = { jwtName: 'jwt' };
+
 type User = {
   name: string;
 };
 
-const AuthContext = React.createContext<AuthContext | null>(null);
+type AuthState = {
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+  login: (credentials: { email: string; password: string }) => Promise<void>;
+  logout: () => void;
+  fetchUser: () => Promise<void>;
+};
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // const navigate = useNavigate();
-  const [user, setUser] = React.useState<User | null>(null);
-  const [token, setToken] = React.useState(localStorage.getItem(localStorageConstants.jwtName) || null);
-  const [isAuthenticated, setIsAuthenticated] = React.useState(!!token);
+export const useAuthStore = create<AuthState>((set, get) => ({
+  isAuthenticated: !!localStorage.getItem(localStorageConstants.jwtName),
+  user: null,
+  token: localStorage.getItem(localStorageConstants.jwtName) || null,
 
-  React.useEffect(() => {
-    if (token) fetchUser();
-  }, [token]);
-
-  const login = async (credentials: { email: string; password: string }) => {
+  login: async (credentials) => {
     try {
       const { data } = await authSignIn({ body: { email: credentials.email, password: credentials.password } });
-      console.log(data);
       if (data?.access_token) {
-        setToken(data.access_token);
-        setIsAuthenticated(true);
         localStorage.setItem(localStorageConstants.jwtName, data.access_token);
-        await fetchUser();
+        set({ token: data.access_token, isAuthenticated: true });
+        get().fetchUser();
       } else {
         throw new Error('Error en la autenticación');
       }
@@ -43,28 +35,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Error en el login:', error);
       throw error;
     }
-  };
+  },
 
-  const logout = async () => {
-    setToken(null);
-    setIsAuthenticated(false);
-    setUser(null);
+  logout: () => {
     localStorage.removeItem(localStorageConstants.jwtName);
-    console.log('Saliendo de la aplicacion');
-    // navigate({ to: '/login' });
-  };
+    set({ token: null, isAuthenticated: false, user: null });
+    console.log('Saliendo de la aplicación');
+  },
 
-  const fetchUser = async () => {
+  fetchUser: async () => {
     try {
       const { data } = await authGetProfile();
-      if (data) setUser({ name: data.name });
+      if (data) {
+        set({ user: { name: data.name } });
+      }
     } catch (error) {
-      console.log('Error en el fetch user' + error);
-      logout();
+      console.log('Error en el fetch user:', error);
+      get().logout();
     }
-  };
-
-  return <AuthContext.Provider value={{ isAuthenticated, user, login, logout, token }}>{children}</AuthContext.Provider>;
-}
-
-export const useAuth = () => React.useContext(AuthContext);
+  },
+}));
