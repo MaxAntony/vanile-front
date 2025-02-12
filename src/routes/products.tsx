@@ -2,9 +2,6 @@ import { createFileRoute } from '@tanstack/react-router';
 import CreateProductDialog from '../components/product/AddProductDialog';
 import TableProduct from '../components/product/TableProduct';
 
-export const Route = createFileRoute('/products')({
-  component: Products,
-});
 
 function Products() {
   return (
@@ -19,3 +16,6 @@ function Products() {
     </section>
   );
 }
+export const Route = createFileRoute('/products')({
+  component: Products,
+});
