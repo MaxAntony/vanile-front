@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
 import { Route as PosImport } from './routes/pos'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as HomeImport } from './routes/_home'
@@ -24,6 +25,12 @@ import { Route as AuthRegisterImport } from './routes/_auth.register'
 import { Route as AuthLoginImport } from './routes/_auth.login'
 
 // Create/Update Routes
+
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const PosRoute = PosImport.update({
   id: '/pos',
@@ -119,6 +126,13 @@ declare module '@tanstack/react-router' {
       path: '/pos'
       fullPath: '/pos'
       preLoaderRoute: typeof PosImport
+      parentRoute: typeof rootRoute
+    }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
       parentRoute: typeof rootRoute
     }
     '/_auth/login': {
@@ -227,6 +241,7 @@ export interface FileRoutesByFullPath {
   '': typeof HomeRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/pos': typeof PosRouteWithChildren
+  '/test': typeof TestRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/dashboard/products': typeof DashboardProductsRoute
@@ -238,6 +253,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
+  '/test': typeof TestRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/dashboard/products': typeof DashboardProductsRoute
@@ -253,6 +269,7 @@ export interface FileRoutesById {
   '/_home': typeof HomeRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/pos': typeof PosRouteWithChildren
+  '/test': typeof TestRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/dashboard/products': typeof DashboardProductsRoute
@@ -268,6 +285,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/pos'
+    | '/test'
     | '/login'
     | '/register'
     | '/dashboard/products'
@@ -278,6 +296,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
+    | '/test'
     | '/login'
     | '/register'
     | '/dashboard/products'
@@ -291,6 +310,7 @@ export interface FileRouteTypes {
     | '/_home'
     | '/dashboard'
     | '/pos'
+    | '/test'
     | '/_auth/login'
     | '/_auth/register'
     | '/dashboard/products'
@@ -306,6 +326,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   PosRoute: typeof PosRouteWithChildren
+  TestRoute: typeof TestRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -313,6 +334,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   PosRoute: PosRouteWithChildren,
+  TestRoute: TestRoute,
 }
 
 export const routeTree = rootRoute
@@ -328,7 +350,8 @@ export const routeTree = rootRoute
         "/_auth",
         "/_home",
         "/dashboard",
-        "/pos"
+        "/pos",
+        "/test"
       ]
     },
     "/_auth": {
@@ -357,6 +380,9 @@ export const routeTree = rootRoute
       "children": [
         "/pos/"
       ]
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/_auth/login": {
       "filePath": "_auth.login.tsx",

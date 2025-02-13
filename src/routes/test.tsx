@@ -27,7 +27,7 @@ import { ComponentType, useEffect, useMemo, useRef, useState } from 'react';
 import { Item, itemSearch, OrderItem } from '../api-client';
 import { orderCreateMutation } from '../api-client/@tanstack/react-query.gen';
 
-export const Route = createFileRoute('/pos/')({
+export const Route = createFileRoute('/test')({
   component: Test,
 });
 
@@ -88,119 +88,6 @@ const filters: Filter[] = [
     quantity: 25,
   },
 ];
-
-// Productos
-type Product = {
-  id: number;
-  imageUrl: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-};
-
-const products: Product[] = [
-  {
-    id: 1,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Tarta de manzana',
-    category: 'Postres',
-    price: 5.99,
-    stock: 12,
-  },
-  {
-    id: 2,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Chocolate caliente',
-    category: 'Bebidas',
-    price: 2.49,
-    stock: 25,
-  },
-  {
-    id: 3,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Galletas de avena',
-    category: 'Postres',
-    price: 3.99,
-    stock: 30,
-  },
-  {
-    id: 4,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Café espresso',
-    category: 'Bebidas',
-    price: 1.99,
-    stock: 50,
-  },
-  {
-    id: 5,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Tiramisu',
-    category: 'Postres',
-    price: 6.49,
-    stock: 15,
-  },
-  {
-    id: 6,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Limonada natural',
-    category: 'Bebidas',
-    price: 2.79,
-    stock: 40,
-  },
-  {
-    id: 7,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Cheesecake de frutos rojos',
-    category: 'Postres',
-    price: 7.99,
-    stock: 8,
-  },
-  {
-    id: 8,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Mojito',
-    category: 'Bebidas',
-    price: 4.99,
-    stock: 10,
-  },
-  {
-    id: 9,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Brownie de chocolate',
-    category: 'Postres',
-    price: 4.29,
-    stock: 18,
-  },
-  {
-    id: 10,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Café con leche',
-    category: 'Bebidas',
-    price: 2.49,
-    stock: 35,
-  },
-  {
-    id: 11,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Pastel de zanahoria',
-    category: 'Postres',
-    price: 5.49,
-    stock: 20,
-  },
-  {
-    id: 12,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Batido de vainilla',
-    category: 'Bebidas',
-    price: 3.59,
-    stock: 22,
-  },
-];
-
-interface CartItem extends Product {
-  quantity: number;
-}
 
 function Test() {
   const filterContainer = useRef<HTMLDivElement>(null);
