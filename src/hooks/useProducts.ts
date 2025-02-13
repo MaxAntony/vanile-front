@@ -11,6 +11,9 @@ const useProducts = () => {
     onError: (error) => {
       console.log(error);
     },
+    onSuccess: () => {
+      refetch();
+    },
   });
 
   const { mutate: removeItem } = useMutation({ ...itemRemoveMutation() });
@@ -19,6 +22,9 @@ const useProducts = () => {
     ...itemUpdateMutation(),
     onError: (error) => {
       console.log(error);
+    },
+    onSuccess: () => {
+      refetch();
     },
   });
 
