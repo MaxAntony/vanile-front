@@ -56,7 +56,7 @@ function MainLayout(props: Props) {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <Link to='/dashboard'>
+          <Link to='/'>
             <ListItemText primary='Inicio' />
           </Link>
         </ListItem>
