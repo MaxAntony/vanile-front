@@ -1,14 +1,15 @@
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useAuthStore } from '../contexts/auth';
 
 interface LoginFormData {
   email: string;
   password: string;
 }
 
-export const Route = createFileRoute('/_auth/_layout/login')({
+export const Route = createFileRoute('/_auth/login')({
   component: LoginComponent,
 });
 
@@ -22,13 +23,15 @@ function LoginComponent() {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const auth = useAuthStore();
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name as keyof LoginFormData]) {
       setErrors((prev) => ({
         ...prev,
@@ -48,8 +51,8 @@ function LoginComponent() {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 4) {
+      newErrors.password = 'Password must be at least 4 characters';
     }
 
     setErrors(newErrors);
@@ -63,17 +66,13 @@ function LoginComponent() {
 
     setIsLoading(true);
     try {
-      // Add your login logic here
       console.log('Login attempted with:', formData);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Handle successful login
-      // Example: navigate('/dashboard');
+      await auth?.login({ email: formData.email, password: formData.password });
+      navigate({
+        to: '/dashboard',
+      });
     } catch (error) {
       console.error('Login error:', error);
-      // Handle error appropriately
     } finally {
       setIsLoading(false);
     }
