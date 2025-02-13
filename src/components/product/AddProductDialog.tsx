@@ -6,38 +6,39 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
-import * as yup from 'yup';
+import z from 'zod';
 import useProducts from '../../hooks/useProducts';
 
 export default function CreateProductDialog() {
-  const schema = yup.object().shape({
-    productName: yup.string().min(3, 'El nombre debe tener al menos 3 caracteres').required('El nombre es obligatorio'),
+  const schema = z.object({
+    productName: z
+      .string()
+      .min(3, { message: 'El nombre debe tener al menos 3 caracteres' })
+      .refine((value) => value.trim().length > 0, { message: 'El nombre es obligatorio' }),
 
-    productPrice: yup
-      .number()
-      .typeError('El precio debe ser un número')
-      .positive('El precio debe ser un número positivo')
-      .required('El precio es obligatorio'),
+    productPrice: z
+      .string()
+      .refine((value) => !isNaN(Number(value)), { message: 'El precio debe ser un número válido' })
+      .refine((value) => Number(value) > 0, { message: 'El precio debe ser un número positivo' }),
 
-    productImage: yup
-      .mixed()
-      .required('La imagen es obligatoria')
-      .test('fileType', 'Solo se permiten imágenes (JPG, PNG, GIF)', (value) => {
-        if (!value || !(value instanceof File)) return false;
-        return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
+    productImage: z
+      .any()
+      .refine((file) => ['image/jpeg', 'image/png', 'image/gif'].includes(file.type), {
+        message: 'Solo se permiten imágenes (JPG, PNG, GIF)',
       })
-      .test('fileSize', 'El tamaño máximo es 200MB', (value) => {
-        if (!value || !(value instanceof File)) return false;
-        return value.size <= 200 * 1024 * 1024;
-      }),
+      .refine((file) => file.size <= 200 * 1024 * 1024, {
+        message: 'El tamaño máximo es 200MB',
+      })
+      .refine((file) => file !== null, { message: 'La imagen es obligatoria' }),
   });
+
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
     productName: '',
     productPrice: '',
     productImage: new Blob(),
   });
-  const { itemCreate, refetch } = useProducts();
+  const { itemCreate } = useProducts();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,8 +61,7 @@ export default function CreateProductDialog() {
   const handleSubmit = async () => {
     try {
       console.log(formData);
-      await schema.validate(formData, { abortEarly: false });
-      console.log(formData);
+      schema.parse(formData);
 
       itemCreate.mutate({
         body: {
@@ -70,11 +70,12 @@ export default function CreateProductDialog() {
           image: formData.productImage,
         },
       });
-
       handleClose();
-      refetch();
     } catch (err) {
-      console.log('error' + err.errors);
+      console.log('Error:', err);
+      if (err instanceof z.ZodError) {
+        console.log('Errores de validación:', err.errors);
+      }
     }
   };
 
