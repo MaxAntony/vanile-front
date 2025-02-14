@@ -20,12 +20,15 @@ import {
   SwipeableDrawer,
   TextField,
   Typography,
+  AppBar,
+  Toolbar
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ComponentType, useEffect, useMemo, useRef, useState } from 'react';
+import { ComponentType, useEffect, useMemo, useRef, useState} from 'react';
 import { Item, itemSearch, OrderItem } from '../api-client';
 import { orderCreateMutation } from '../api-client/@tanstack/react-query.gen';
+
 
 export const Route = createFileRoute('/pos/')({
   component: Test,
@@ -253,7 +256,7 @@ function Test() {
     setOpenNotification(true);
   };
 
-  const handleCloseNotification = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+  const handleCloseNotification = (_event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -323,12 +326,21 @@ function Test() {
       },
     );
   };
-
+    
   return (
     <>
-      <Box component='main' className='mb-16 p-4'>
+      <Box component='main' className='mb-16'>
+      {/* Barra de Navegacion */}
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar className='justify-end'>
+            
+            <Link to='/dashboard' className='text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>Volver</Link>
+          </Toolbar>
+        </AppBar>
+      </Box>
         {/* Filter section */}
-        <section ref={filterContainer} className='mt-4 flex gap-x-4 overflow-x-auto bg-transparent'>
+        <section ref={filterContainer} className='mt-4 flex gap-x-4 overflow-x-auto bg-transparent p-4'>
           {filters.map((filter: Filter, index: number) => (
             <div key={index} className='rounded-lg border border-gray-600 bg-white shadow-md' onClick={(e) => scrollToElement(e)}>
               <ButtonBase className='flex flex-col p-4' sx={{ padding: '10px' }}>
@@ -347,11 +359,11 @@ function Test() {
           label='Buscar productos'
           variant='outlined'
           fullWidth
-          sx={{ my: 2 }}
+          sx={{ my: 2}}
         />
 
         {/* Products section */}
-        <section className='grid grid-cols-2 gap-4'>
+        <section className='grid grid-cols-2 gap-4 p-4'>
           {products?.map((prod: Item) => (
             <ButtonBase key={prod.id} focusRipple>
               <Card sx={{ borderRadius: '10px' }} className='relative w-full' onClick={() => addToCart(prod)}>
