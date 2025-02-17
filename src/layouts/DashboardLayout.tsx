@@ -233,9 +233,6 @@ function MainLayout(props: Props) {
       </Box>
       <Box component='main' sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar />
-        {/* Content */}
-        <h1>Bienvenido</h1>
-
         <Outlet />
       </Box>
     </Box>
