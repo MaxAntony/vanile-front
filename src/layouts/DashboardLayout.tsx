@@ -11,16 +11,16 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import { Link, Outlet } from '@tanstack/react-router';
 import * as React from 'react';
-
 import Logout from '@mui/icons-material/Logout';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-
+import SpaIcon from '@mui/icons-material/Spa';
+import HomeIcon from '@mui/icons-material/Home';
+import Inventory2Icon from '@mui/icons-material/Inventory2';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 interface Props {
   /**
    * Injected by the documentation to work in an iframe.
@@ -52,22 +52,32 @@ function MainLayout(props: Props) {
 
   const drawer = (
     <div>
-      <Toolbar />
+     
+      <Box className='flex p-4'>
+              <SpaIcon className='mr-2' />
+              <Link to='/' className='font-mono text-2xl font-bold tracking-wide text-black no-underline'>
+                VANILE
+              </Link>
+      </Box>
       <Divider />
-      <List>
-        <ListItem disablePadding>
-          <Link to='/'>
+      
+      <List className='p-4'>
+        <ListItem disablePadding className='p-2'>
+          <HomeIcon className='mx-4 text-gray-400'></HomeIcon>
+          <Link to='/' className=''>
             <ListItemText primary='Inicio' />
           </Link>
         </ListItem>
 
-        <ListItem disablePadding>
+        <ListItem disablePadding className='p-2'>
+          <Inventory2Icon className='mx-4 text-gray-400'></Inventory2Icon>
           <Link to='/dashboard/products'>
             <ListItemText primary='Productos' />
           </Link>
         </ListItem>
 
-        <ListItem disablePadding>
+        <ListItem disablePadding className='p-2'>
+          <PointOfSaleIcon className='mx-4 text-gray-400'></PointOfSaleIcon>
           <Link to='/dashboard/sales'>
             <ListItemText primary='Ventas' />
           </Link>
@@ -90,6 +100,7 @@ function MainLayout(props: Props) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
+      {/* Barra de navegacion */}
       <AppBar
         position='fixed'
         sx={{
@@ -161,7 +172,7 @@ function MainLayout(props: Props) {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                <MenuItem onClick={handleClose}>
+                {/* <MenuItem onClick={handleClose}>
                   <Avatar /> Profile
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -179,7 +190,7 @@ function MainLayout(props: Props) {
                     <Settings fontSize='small' />
                   </ListItemIcon>
                   Settings
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleClose}>
                   <ListItemIcon>
                     <Logout fontSize='small' />
