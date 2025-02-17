@@ -33,6 +33,7 @@ import type {
   UserCreateData,
   UserCreateResponse,
   UserFindAllData,
+  UserFindAllResponse,
   UserFindOneData,
   UserRemoveData,
   UserRemoveResponse,
@@ -50,7 +51,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 export const userFindAll = <ThrowOnError extends boolean = false>(options?: Options<UserFindAllData, ThrowOnError>) => {
-  return (options?.client ?? _heyApiClient).get<unknown, unknown, ThrowOnError>({
+  return (options?.client ?? _heyApiClient).get<UserFindAllResponse, unknown, ThrowOnError>({
     url: '/user',
     ...options,
   });

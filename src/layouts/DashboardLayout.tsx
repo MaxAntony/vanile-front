@@ -1,5 +1,12 @@
+import { Person } from '@mui/icons-material';
+import HomeIcon from '@mui/icons-material/Home';
+import Inventory2Icon from '@mui/icons-material/Inventory2';
+import Logout from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import SpaIcon from '@mui/icons-material/Spa';
 import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -7,20 +14,15 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import { Link, Outlet } from '@tanstack/react-router';
-import * as React from 'react';
-import Logout from '@mui/icons-material/Logout';
-import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import SpaIcon from '@mui/icons-material/Spa';
-import HomeIcon from '@mui/icons-material/Home';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import { Link, Outlet, useRouter } from '@tanstack/react-router';
+import * as React from 'react';
+import { useAuthStore } from '../contexts/auth';
 interface Props {
   /**
    * Injected by the documentation to work in an iframe.
@@ -30,7 +32,9 @@ interface Props {
 }
 
 function MainLayout(props: Props) {
+  const auth = useAuthStore();
   const drawerWidth = 240;
+  const router = useRouter();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -52,19 +56,18 @@ function MainLayout(props: Props) {
 
   const drawer = (
     <div>
-     
       <Box className='flex p-4'>
-              <SpaIcon className='mr-2' />
-              <Link to='/' className='font-mono text-2xl font-bold tracking-wide text-black no-underline'>
-                VANILE
-              </Link>
+        <SpaIcon className='mr-2' />
+        <Link to='/' className='font-mono text-2xl font-bold tracking-wide text-black no-underline'>
+          VANILE
+        </Link>
       </Box>
       <Divider />
-      
+
       <List className='p-4'>
         <ListItem disablePadding className='p-2'>
           <HomeIcon className='mx-4 text-gray-400'></HomeIcon>
-          <Link to='/' className=''>
+          <Link to='/dashboard' className=''>
             <ListItemText primary='Inicio' />
           </Link>
         </ListItem>
@@ -82,6 +85,12 @@ function MainLayout(props: Props) {
             <ListItemText primary='Ventas' />
           </Link>
         </ListItem>
+        <ListItem disablePadding className='p-2'>
+          <Person className='mx-4 text-gray-400'></Person>
+          <Link to='/dashboard/users'>
+            <ListItemText primary='Usuarios' />
+          </Link>
+        </ListItem>
       </List>
     </div>
   );
@@ -96,6 +105,11 @@ function MainLayout(props: Props) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    auth.logout();
+    router.navigate({ to: '/login' });
   };
   return (
     <Box sx={{ display: 'flex' }}>
@@ -191,11 +205,11 @@ function MainLayout(props: Props) {
                   </ListItemIcon>
                   Settings
                 </MenuItem> */}
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <Logout fontSize='small' />
                   </ListItemIcon>
-                  Logout
+                  Cerrar sesion
                 </MenuItem>
               </Menu>
             </React.Fragment>

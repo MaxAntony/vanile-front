@@ -1,6 +1,4 @@
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import Add from '@mui/icons-material/Add';
-import CakeIcon from '@mui/icons-material/Cake';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -8,6 +6,7 @@ import Remove from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   Alert,
+  AppBar,
   Box,
   Button,
   ButtonBase,
@@ -19,197 +18,26 @@ import {
   SnackbarCloseReason,
   SwipeableDrawer,
   TextField,
+  Toolbar,
   Typography,
-  AppBar,
-  Toolbar
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ComponentType, useEffect, useMemo, useRef, useState} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Item, itemSearch, OrderItem } from '../api-client';
 import { orderCreateMutation } from '../api-client/@tanstack/react-query.gen';
-
+import PaymentForm from '../components/PaymentForm';
 
 export const Route = createFileRoute('/pos/')({
   component: Test,
 });
-
-// Rutas
-const ROUTE_NAMES = {
-  DASHBOARD: {
-    TEST: '/test',
-    SALES: '/about',
-  },
-};
-
-// Filtros
-type Filter = {
-  icon: ComponentType;
-  title: string;
-  quantity: number;
-};
-
-const filters: Filter[] = [
-  {
-    icon: CakeIcon,
-    title: 'Todos',
-    quantity: 100,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Postre',
-    quantity: 75,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Bebida',
-    quantity: 25,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Bebida',
-    quantity: 25,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Todos',
-    quantity: 100,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Postre',
-    quantity: 75,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Bebida',
-    quantity: 25,
-  },
-  {
-    icon: CakeIcon,
-    title: 'Bebida',
-    quantity: 25,
-  },
-];
-
-// Productos
-type Product = {
-  id: number;
-  imageUrl: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-};
-
-const products: Product[] = [
-  {
-    id: 1,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Tarta de manzana',
-    category: 'Postres',
-    price: 5.99,
-    stock: 12,
-  },
-  {
-    id: 2,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Chocolate caliente',
-    category: 'Bebidas',
-    price: 2.49,
-    stock: 25,
-  },
-  {
-    id: 3,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Galletas de avena',
-    category: 'Postres',
-    price: 3.99,
-    stock: 30,
-  },
-  {
-    id: 4,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Café espresso',
-    category: 'Bebidas',
-    price: 1.99,
-    stock: 50,
-  },
-  {
-    id: 5,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Tiramisu',
-    category: 'Postres',
-    price: 6.49,
-    stock: 15,
-  },
-  {
-    id: 6,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Limonada natural',
-    category: 'Bebidas',
-    price: 2.79,
-    stock: 40,
-  },
-  {
-    id: 7,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Cheesecake de frutos rojos',
-    category: 'Postres',
-    price: 7.99,
-    stock: 8,
-  },
-  {
-    id: 8,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Mojito',
-    category: 'Bebidas',
-    price: 4.99,
-    stock: 10,
-  },
-  {
-    id: 9,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Brownie de chocolate',
-    category: 'Postres',
-    price: 4.29,
-    stock: 18,
-  },
-  {
-    id: 10,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Café con leche',
-    category: 'Bebidas',
-    price: 2.49,
-    stock: 35,
-  },
-  {
-    id: 11,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Pastel de zanahoria',
-    category: 'Postres',
-    price: 5.49,
-    stock: 20,
-  },
-  {
-    id: 12,
-    imageUrl: 'https://www.revistapancaliente.co/wp-content/uploads/2024/09/Por-que-comemos-postres.jpg',
-    name: 'Batido de vainilla',
-    category: 'Bebidas',
-    price: 3.59,
-    stock: 22,
-  },
-];
-
-interface CartItem extends Product {
-  quantity: number;
-}
 
 function Test() {
   const filterContainer = useRef<HTMLDivElement>(null);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [cart, setCart] = useState<(OrderItem & Item)[]>([]);
   const [searchText, setSearchText] = useState<string>('');
+  const [purchaseOk, setPurchaseOk] = useState(false);
 
   const { products } = useSearchProducts(searchText);
   const createOrder = useMutation({ ...orderCreateMutation() });
@@ -322,44 +150,35 @@ function Test() {
             message: `Productos enviados`,
           }));
           setCart([]);
+          setOpenDrawer(false);
         },
       },
     );
   };
-    
+
   return (
     <>
       <Box component='main' className='mb-16'>
-      {/* Barra de Navegacion */}
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar className='justify-end'>
-            
-            <Link to='/dashboard' className='text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>Volver</Link>
-          </Toolbar>
-        </AppBar>
-      </Box>
-        {/* Filter section */}
-        <section ref={filterContainer} className='mt-4 flex gap-x-4 overflow-x-auto bg-transparent p-4'>
-          {filters.map((filter: Filter, index: number) => (
-            <div key={index} className='rounded-lg border border-gray-600 bg-white shadow-md' onClick={(e) => scrollToElement(e)}>
-              <ButtonBase className='flex flex-col p-4' sx={{ padding: '10px' }}>
-                <filter.icon />
-                <span className='font-medium'>{filter.title}</span>
-                <span className='text-nowrap text-xs text-gray-500'>{filter.quantity} items</span>
-              </ButtonBase>
-            </div>
-          ))}
-        </section>
-
-        {/* Input search section */}
+        {/* Barra de Navegacion */}
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar position='static'>
+            <Toolbar className='justify-end'>
+              <Link
+                to='/dashboard'
+                className='me-2 rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700'
+              >
+                Volver
+              </Link>
+            </Toolbar>
+          </AppBar>
+        </Box>
         <TextField
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
           id='outlined-basic'
           label='Buscar productos'
           variant='outlined'
           fullWidth
-          sx={{ my: 2}}
+          sx={{ my: 2 }}
         />
 
         {/* Products section */}
@@ -373,7 +192,7 @@ function Test() {
                     {prod.name}
                   </Typography>
                   <Typography variant='subtitle2' className='text-gray-400'>
-                    {/* {prod.category} */} Postre
+                    {/* {prod.category} */} Producto
                   </Typography>
                   <Typography variant='button' className='text-right font-bold text-slate-900'>
                     {prod.price.toLocaleString('es-PE', {
@@ -381,9 +200,9 @@ function Test() {
                       currency: 'PEN',
                     })}
                   </Typography>
-                  <span className='absolute right-0 top-0 rounded-full bg-blue-600 px-2 py-1 text-center font-bold text-white'>
-                    {/* {prod.stock} */} 27
-                  </span>
+                  {/* <span className='absolute right-0 top-0 rounded-full bg-blue-600 px-2 py-1 text-center font-bold text-white'> */}
+                  {/*   27 */}
+                  {/* </span> */}
                 </CardContent>
               </Card>
             </ButtonBase>
@@ -393,16 +212,16 @@ function Test() {
 
       {/* Menu helper */}
       <div className='fixed bottom-0 left-0 w-full rounded-t-3xl border-t border-gray-200 bg-white shadow-lg'>
-        <div className='grid grid-cols-3'>
-          <Link to={ROUTE_NAMES.DASHBOARD.TEST} className='flex flex-col items-center p-3 text-gray-600 transition-colors duration-200'>
-            <ShoppingCartIcon className={`${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`} />
-            <span className={`mt-1 text-xs font-medium ${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`}>POS</span>
+        <div className='grid grid-cols-2'>
+          <Link to={'/pos'} className='flex flex-col items-center p-3 text-gray-600 transition-colors duration-200'>
+            <ShoppingCartIcon className={`${location.pathname === '/pos' && 'text-blue-500'}`} />
+            <span className={`mt-1 text-xs font-medium ${location.pathname === '/pos' && 'text-blue-500'}`}>POS</span>
           </Link>
 
-          <Link to={ROUTE_NAMES.DASHBOARD.TEST} className='flex flex-col items-center p-3 text-gray-600 transition-colors duration-200'>
-            <AccessAlarmIcon className={`${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`} />
-            <span className={`mt-1 text-xs font-medium ${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`}>Ventas</span>
-          </Link>
+          {/* <Link to={} className='flex flex-col items-center p-3 text-gray-600 transition-colors duration-200'> */}
+          {/*   <AccessAlarmIcon className={`${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`} /> */}
+          {/*   <span className={`mt-1 text-xs font-medium ${location.pathname === ROUTE_NAMES.DASHBOARD.TEST && 'text-blue-500'}`}>Ventas</span> */}
+          {/* </Link> */}
 
           <ButtonBase onClick={toggleDrawer(true)} focusRipple>
             <section className='flex size-full flex-col items-center justify-center rounded-se-3xl bg-green-400 text-gray-600'>
@@ -480,10 +299,22 @@ function Test() {
             </span>
           </section>
 
-          <section className='grid grid-cols-2 gap-1'>
+          <section className='flex flex-col gap-2'>
             <Button variant='contained' startIcon={<KeyboardArrowLeftIcon />} onClick={toggleDrawer(false)}>
               Regresar
             </Button>
+            {/* <Button variant='contained' endIcon={<KeyboardArrowRightIcon />} onClick={submitOrderCreditCArd} disabled={cart.length === 0}> */}
+            {/*   pagar con tarjeta */}
+            {/* </Button> */}
+            <PaymentForm
+              amount={Math.trunc(totalPrice * 100)}
+              afterOk={() => {
+                // setCart([]);
+                // setPurchaseOk(true);
+                submitOrder();
+              }}
+            />
+
             <Button variant='contained' endIcon={<KeyboardArrowRightIcon />} onClick={submitOrder} disabled={cart.length === 0}>
               Confirmar
             </Button>
@@ -496,6 +327,14 @@ function Test() {
         handleClose={handleCloseNotification}
         severity={notifyOptions.severity}
         message={notifyOptions.message}
+      />
+      <Snackbar
+        open={purchaseOk}
+        autoHideDuration={1000}
+        message='Compra exitosa'
+        onClose={() => {
+          setPurchaseOk(false);
+        }}
       />
     </>
   );

@@ -1,7 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import SpaIcon from '@mui/icons-material/Spa';
 import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -9,26 +8,25 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link, Outlet } from '@tanstack/react-router';
 import * as React from 'react';
 
 const pages = [
+  // {
+  //   title: 'Inicio',
+  //   link: '/',
+  // },
+  // {
+  //   title: 'Dashboard',
+  //   link: '/dashboard',
+  // },
+  // {
+  //   title: 'Productos',
+  //   link: '/dashboard/products',
+  // },
   {
-    title: 'Inicio',
-    link: '/',
-  },
-  {
-    title: 'Dashboard',
-    link: '/dashboard',
-  },
-  {
-    title: 'Productos',
-    link: '/dashboard/products',
-  },
-  {
-    title: 'Login',
+    title: 'Ingresar ',
     link: '/login',
   },
 ];
@@ -116,39 +114,40 @@ function DashboardLayout() {
                 </Link>
               ))}
             </Box>
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title='Open settings'>
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id='menu-appbar'
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+            {/* <Box sx={{ flexGrow: 0 }}> */}
+            {/*   <Tooltip title='Open settings'> */}
+            {/*     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}> */}
+            {/*       <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' /> */}
+            {/*     </IconButton> */}
+            {/*   </Tooltip> */}
+            {/*   <Menu */}
+            {/*     sx={{ mt: '45px' }} */}
+            {/*     id='menu-appbar' */}
+            {/*     anchorEl={anchorElUser} */}
+            {/*     anchorOrigin={{ */}
+            {/*       vertical: 'top', */}
+            {/*       horizontal: 'right', */}
+            {/*     }} */}
+            {/*     keepMounted */}
+            {/*     transformOrigin={{ */}
+            {/*       vertical: 'top', */}
+            {/*       horizontal: 'right', */}
+            {/*     }} */}
+            {/*     open={Boolean(anchorElUser)} */}
+            {/*     onClose={handleCloseUserMenu} */}
+            {/*   > */}
+            {/*     {settings.map((setting) => ( */}
+            {/*       <MenuItem key={setting} onClick={handleCloseUserMenu}> */}
+            {/*         <Typography sx={{ textAlign: 'center' }}>{setting}</Typography> */}
+            {/*       </MenuItem> */}
+            {/*     ))} */}
+            {/*   </Menu> */}
+            {/* </Box> */}
           </Toolbar>
         </Container>
       </AppBar>
       <Outlet />
+      {/* <footer>o</footer> */}
     </>
   );
 }

@@ -6,6 +6,12 @@ export type CreateUserDto = {
   password: string;
 };
 
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
 export type UpdateUserDto = {
   [key: string]: unknown;
 };
@@ -130,8 +136,10 @@ export type UserFindAllData = {
 };
 
 export type UserFindAllResponses = {
-  200: unknown;
+  200: Array<User>;
 };
+
+export type UserFindAllResponse = UserFindAllResponses[keyof UserFindAllResponses];
 
 export type UserCreateData = {
   body: CreateUserDto;

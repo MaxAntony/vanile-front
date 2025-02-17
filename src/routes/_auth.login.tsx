@@ -1,5 +1,5 @@
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuthStore } from '../contexts/auth';
@@ -44,15 +44,15 @@ function LoginComponent() {
     const newErrors: Partial<LoginFormData> = {};
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email es requerido';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = 'Email es invalido';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'constraseña es requerida';
     } else if (formData.password.length < 4) {
-      newErrors.password = 'Password must be at least 4 characters';
+      newErrors.password = 'tiene que tener al menos 4 caracteres';
     }
 
     setErrors(newErrors);
@@ -119,7 +119,7 @@ function LoginComponent() {
       <TextField
         fullWidth
         margin='normal'
-        label='Password'
+        label='constraseña'
         name='password'
         type={showPassword ? 'text' : 'password'}
         value={formData.password}
@@ -143,24 +143,24 @@ function LoginComponent() {
         }}
       />
 
-      <Box sx={{ mt: 2, mb: 2, textAlign: 'right' }}>
-        <Link href='#' variant='body2' underline='hover'>
-          Forgot password?
-        </Link>
-      </Box>
+      {/* <Box sx={{ mt: 2, mb: 2, textAlign: 'right' }}> */}
+      {/*   <Link href='#' variant='body2' underline='hover'> */}
+      {/*     Forgot password? */}
+      {/*   </Link> */}
+      {/* </Box> */}
 
       <Button type='submit' fullWidth variant='contained' size='large' disabled={isLoading} sx={{ mt: 2 }}>
-        {isLoading ? 'Signing in...' : 'Sign In'}
+        {isLoading ? 'Ingresando...' : 'Ingresar'}
       </Button>
 
-      <Box sx={{ mt: 3, textAlign: 'center' }}>
-        <Typography variant='body2' color='text.secondary'>
-          Don't have an account?{' '}
-          <Link href='/auth/register' variant='body2' underline='hover'>
-            Sign up
-          </Link>
-        </Typography>
-      </Box>
+      {/* <Box sx={{ mt: 3, textAlign: 'center' }}> */}
+      {/*   <Typography variant='body2' color='text.secondary'> */}
+      {/*     Don't have an account?{' '} */}
+      {/*     <Link href='/auth/register' variant='body2' underline='hover'> */}
+      {/*       Sign up */}
+      {/*     </Link> */}
+      {/*   </Typography> */}
+      {/* </Box> */}
     </Box>
   );
 }

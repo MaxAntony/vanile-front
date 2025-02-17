@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TestImport } from './routes/test'
 import { Route as PosImport } from './routes/pos'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as HomeImport } from './routes/_home'
@@ -19,18 +18,13 @@ import { Route as AuthImport } from './routes/_auth'
 import { Route as PosIndexImport } from './routes/pos.index'
 import { Route as DashboardIndexImport } from './routes/dashboard.index'
 import { Route as HomeIndexImport } from './routes/_home.index'
+import { Route as DashboardUsersImport } from './routes/dashboard.users'
 import { Route as DashboardSalesImport } from './routes/dashboard.sales'
 import { Route as DashboardProductsImport } from './routes/dashboard.products'
 import { Route as AuthRegisterImport } from './routes/_auth.register'
 import { Route as AuthLoginImport } from './routes/_auth.login'
 
 // Create/Update Routes
-
-const TestRoute = TestImport.update({
-  id: '/test',
-  path: '/test',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const PosRoute = PosImport.update({
   id: '/pos',
@@ -70,6 +64,12 @@ const HomeIndexRoute = HomeIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HomeRoute,
+} as any)
+
+const DashboardUsersRoute = DashboardUsersImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 const DashboardSalesRoute = DashboardSalesImport.update({
@@ -128,13 +128,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PosImport
       parentRoute: typeof rootRoute
     }
-    '/test': {
-      id: '/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof TestImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
@@ -161,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/sales'
       fullPath: '/dashboard/sales'
       preLoaderRoute: typeof DashboardSalesImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/users': {
+      id: '/dashboard/users'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersImport
       parentRoute: typeof DashboardImport
     }
     '/_home/': {
@@ -214,12 +214,14 @@ const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 interface DashboardRouteChildren {
   DashboardProductsRoute: typeof DashboardProductsRoute
   DashboardSalesRoute: typeof DashboardSalesRoute
+  DashboardUsersRoute: typeof DashboardUsersRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardProductsRoute: DashboardProductsRoute,
   DashboardSalesRoute: DashboardSalesRoute,
+  DashboardUsersRoute: DashboardUsersRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
@@ -241,11 +243,11 @@ export interface FileRoutesByFullPath {
   '': typeof HomeRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/pos': typeof PosRouteWithChildren
-  '/test': typeof TestRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/users': typeof DashboardUsersRoute
   '/': typeof HomeIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/pos/': typeof PosIndexRoute
@@ -253,11 +255,11 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
-  '/test': typeof TestRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/users': typeof DashboardUsersRoute
   '/': typeof HomeIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/pos': typeof PosIndexRoute
@@ -269,11 +271,11 @@ export interface FileRoutesById {
   '/_home': typeof HomeRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/pos': typeof PosRouteWithChildren
-  '/test': typeof TestRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/users': typeof DashboardUsersRoute
   '/_home/': typeof HomeIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/pos/': typeof PosIndexRoute
@@ -285,22 +287,22 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/pos'
-    | '/test'
     | '/login'
     | '/register'
     | '/dashboard/products'
     | '/dashboard/sales'
+    | '/dashboard/users'
     | '/'
     | '/dashboard/'
     | '/pos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
-    | '/test'
     | '/login'
     | '/register'
     | '/dashboard/products'
     | '/dashboard/sales'
+    | '/dashboard/users'
     | '/'
     | '/dashboard'
     | '/pos'
@@ -310,11 +312,11 @@ export interface FileRouteTypes {
     | '/_home'
     | '/dashboard'
     | '/pos'
-    | '/test'
     | '/_auth/login'
     | '/_auth/register'
     | '/dashboard/products'
     | '/dashboard/sales'
+    | '/dashboard/users'
     | '/_home/'
     | '/dashboard/'
     | '/pos/'
@@ -326,7 +328,6 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   PosRoute: typeof PosRouteWithChildren
-  TestRoute: typeof TestRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -334,7 +335,6 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   PosRoute: PosRouteWithChildren,
-  TestRoute: TestRoute,
 }
 
 export const routeTree = rootRoute
@@ -350,8 +350,7 @@ export const routeTree = rootRoute
         "/_auth",
         "/_home",
         "/dashboard",
-        "/pos",
-        "/test"
+        "/pos"
       ]
     },
     "/_auth": {
@@ -372,6 +371,7 @@ export const routeTree = rootRoute
       "children": [
         "/dashboard/products",
         "/dashboard/sales",
+        "/dashboard/users",
         "/dashboard/"
       ]
     },
@@ -380,9 +380,6 @@ export const routeTree = rootRoute
       "children": [
         "/pos/"
       ]
-    },
-    "/test": {
-      "filePath": "test.tsx"
     },
     "/_auth/login": {
       "filePath": "_auth.login.tsx",
@@ -398,6 +395,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/sales": {
       "filePath": "dashboard.sales.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/users": {
+      "filePath": "dashboard.users.tsx",
       "parent": "/dashboard"
     },
     "/_home/": {
