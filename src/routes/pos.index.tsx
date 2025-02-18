@@ -270,7 +270,7 @@ function Test() {
                       },
                     }}
                   />
-                  <IconButton onClick={() => modifyQuantity(prod, prod.quantity + 1)} color='primary' size='small'>
+                  <IconButton onClick={() => modifyQuantity(prod, prod.quantity + 1)} color='primary' size='small' aria-label='Incrementar cantidad'>
                     <Add />
                   </IconButton>
                   <Typography variant='caption' component='div' className='col-span-2 text-center'>
@@ -282,7 +282,7 @@ function Test() {
                   </Typography>
                 </Box>
               </CardContent>
-              <ButtonBase onClick={() => removeFromCart(prod)} focusRipple>
+              <ButtonBase onClick={() => removeFromCart(prod)} focusRipple aria-label='Eliminar'>
                 <DeleteIcon className='right-0 top-0 m-1 text-red-500' />
               </ButtonBase>
             </Card>
